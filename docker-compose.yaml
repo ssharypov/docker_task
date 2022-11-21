@@ -1,0 +1,31 @@
+version: '3.1'
+
+services:
+  cl_node1:
+    container_name: cl_node1
+    image: debian
+    command: bash /media/bashes/commands1
+    volumes:
+      - './files:/media'
+    expose:
+      - 4567
+  
+  cl_node2:
+    container_name: cl_node2
+    image: debian
+    command: bash /media/bashes/commands2
+    volumes:
+      - './files:/media'
+    environment:
+      WAIT_HOSTS: cl_node1:4567
+
+  cl_node3:
+    container_name: cl_node3
+    image: debian
+    command: bash /media/bashes/commands3
+    volumes:
+      - './files:/media'
+    environment:
+      WAIT_HOSTS: cl_node1:4567
+
+

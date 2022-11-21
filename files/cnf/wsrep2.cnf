@@ -1,0 +1,15 @@
+[mysqld]
+wsrep_provider=/usr/lib/galera3/libgalera_smm.so
+wsrep_cluster_address=gcomm://cl_node1,cl_node2,cl_node3
+binlog_format=ROW
+default_storage_engine=InnoDB
+wsrep_slave_threads= 8
+wsrep_log_conflicts
+innodb_autoinc_lock_mode=2
+wsrep_cluster_name=pxc-cluster
+wsrep_node_name=pxc-cluster-node-2
+pxc_strict_mode=ENFORCING
+wsrep_sst_method=xtrabackup-v2
+wsrep_sst_auth="sstuser:s3cretPass"
+wsrep_node_name=cl_node2
+wsrep_node_address=cl_node2

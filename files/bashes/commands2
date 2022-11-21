@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# cp -rf /media/sources.list /etc/apt/sources.list &&
+apt update &&
+apt install -y wget gnupg2 curl lsb-release procps &&
+wget https://repo.percona.com/apt/percona-release_latest.generic_all.deb &&
+dpkg -i percona-release_latest.generic_all.deb &&
+percona-release disable all &&
+percona-release enable pxc-57 testing &&
+percona-release enable pxb-24 testing &&
+apt-get update &&
+export DEBIAN_FRONTEND=noninteractive &&
+echo percona-xtradb-cluster-57 percona-xtradb-cluster/root_password password 123456 | debconf-set-selections &&
+echo percona-xtradb-cluster-57 percona-xtradb-cluster/root_password_again password 123456 | debconf-set-selections &&
+apt -y install percona-xtradb-cluster-57 &&
+# percona-release enable tools release &&
+# apt update &&
+# apt -y install percona-toolkit &&
+cp -rf /media/cnf/wsrep2.cnf /etc/mysql/percona-xtradb-cluster.conf.d/wsrep.cnf &&
+echo "!includedir /etc/mysql/percona-xtradb-cluster.conf.d/" >> /etc/mysql/my.cnf &&
+service mysql start &&
+mysql -u root -e "CREATE USER 'sstuser'@'localhost' IDENTIFIED BY 's3cretPass'; GRANT RELOAD, LOCK TABLES, PROCESS, REPLICATION CLIENT ON *.* TO 'sstuser'@'localhost'; FLUSH PRIVILEGES;"
+# service mysql stop &&
+# /etc/init.d/mysql bootstrap-pxc
+tail -f /dev/null
